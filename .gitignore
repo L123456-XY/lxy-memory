@@ -1,0 +1,13 @@
+# 系统 / 编辑器
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# 本地测试脚手架与打包文件
+node_modules/
+package-lock.json
+*.zip
+
+# 内部计划文档（不需要公开）
+PLAN.md
