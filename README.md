@@ -96,3 +96,51 @@ js/more.js        时光轴 / 纪念日 / 清单 / 日记 / 每日一问 / 统�
 ---
 
 祝你们有很多很多值得记下的日子。
+
+---
+
+# 附：部署到 GitHub Pages（让朋友打开一个网址就能看）
+
+> 部署后拿到的网址长这样：`https://你的用户名.github.io/我们的回忆录/`（仓库名用英文更稳，例如 `our-memory`）
+> 注意：**免费账号的仓库必须是 Public 才能开 Pages**。这个仓库里只有代码，没有任何你们的照片和日记（数据在各自浏览器里），所以公开也不泄露隐私。
+
+## 方案 A：直接在网页上传（不用装任何东西）
+
+1. 打开 <https://github.com/new> → Repository name 填 `our-memory` → 选 **Public** → Create repository
+2. 在新页面点 **uploading an existing file**
+3. 把本文件夹里的 **`index.html`、`styles.css`、`README.md`、`.gitignore`、`.nojekyll`** 和整个 **`js` 文件夹**拖进去（`PLAN.md` 不用传）→ Commit changes
+4. 仓库页 → **Settings** → 左侧 **Pages** → Source 选 **Deploy from a branch** → Branch 选 **main** + **/(root)** → Save
+5. 等 1～2 分钟刷新 Pages 页面，会出现 `Your site is live at https://用户名.github.io/our-memory/`，把这个链接发给朋友即可
+
+## 方案 B：用命令行（本文件夹已经 `git init` 并提交好了）
+
+先在 GitHub 建一个空仓库（同上，**不要**勾选 Add README），然后在文件夹里执行：
+
+```bash
+# 换成你自己的名字和邮箱（只影响提交记录）
+git config user.name "你的名字"
+git config user.email "你的邮箱"
+
+# 把 origin 换成你自己的仓库地址
+git remote add origin https://github.com/你的用户名/our-memory.git
+git branch -M main
+git push -u origin main
+```
+
+推送完成后，去仓库 **Settings → Pages → Deploy from a branch → main / (root) → Save**，等 1～2 分钟即可。
+
+> 提交记录里的作者目前是占位符 `Our Memory`，想改成本人：先执行上面的 `git config`，再 `git commit --amend --reset-author --no-edit && git push -f`。
+
+## 以后想改内容再更新
+
+```bash
+git add -A && git commit -m "改了点东西" && git push
+```
+
+推送后 Pages 1 分钟左右自动重新发布，刷新网页（Ctrl/Cmd+Shift+R 强制刷新）就能看到新版。
+
+## 三个必须知道的坑
+
+1. **部署 ≠ 数据同步**。朋友打开你的网址，看到的是**她浏览器里的空白数据**，她添加的照片存在她的设备上。想真正共用一份相册，得接后端（Supabase 之类），否则只能靠「导出备份 JSON → 发对方 → 对方导入」手动合并。
+2. **数据跟“站点”绑定**。`https://你.github.io/our-memory/`、`http://localhost:8080`、本地双击 `file://` 是三个不同的站点，各自一份数据，互不相通。选定一个地址长期用，别换来换去。
+3. **GitHub Pages 上的数据也有风险**。清浏览器数据 / 换设备 / 无痕窗口都会丢，所以：设置 → 导出备份，定期存一份到网盘。
