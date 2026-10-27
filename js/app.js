@@ -1091,6 +1091,14 @@
     pickImage: pickImage,
     refreshStorageInfo: refreshStorageInfo,
     fmtBytes: fmtBytes,
+    refreshAll: function () {
+      S = STORE.settings();
+      applyTheme(S.theme);
+      applyIdentity();
+      updateChrome();
+      var cur = currentView || 'home';
+      if (renderers[cur]) renderers[cur]();
+    },
     POSTER: null
   };
   renderers.home = renderHome;

@@ -403,10 +403,42 @@
         </div>
       </div>
 
+      <div class="card" id="cloudCard">
+        <div class="card-head"><h3><span class="em">☁️</span> 云端共享（两地同步）</h3></div>
+        <div class="card-body form-grid">
+          <p class="note-text" style="grid-column:1/-1;margin-top:0">想把网页发给 TA、并且两人都能加照片？用免费的 Supabase 建一张小表就行。<br>
+            步骤见仓库 README 的「云端共享」一节：拿到 <b>项目 URL</b> + <b>anon key</b>，两人填<b>同一个共享码</b>，内容就会自动双向同步（文字 + 照片）。</p>
+          <label class="field">
+            <span>项目 URL</span>
+            <input type="text" class="input" id="clUrl" placeholder="https://abcdefgh.supabase.co" autocomplete="off">
+          </label>
+          <label class="field">
+            <span>anon public key</span>
+            <input type="password" class="input" id="clKey" placeholder="eyJhbGciOiJIUzI1NiIs..." autocomplete="off">
+          </label>
+          <label class="field">
+            <span>共享码（两人必须一样）</span>
+            <div class="avatar-pick">
+              <input type="text" class="input" id="clSpace" placeholder="our-xxxxxxxx" autocomplete="off" style="flex:1">
+              <button class="mini-btn" id="clGen">随机生成</button>
+            </div>
+          </label>
+          <div class="field">
+            <span>&nbsp;</span>
+            <div class="btn-row" style="margin:0">
+              <button class="btn-primary" id="clSave">连接并同步</button>
+              <button class="btn-ghost-solid" id="clNow">立即同步</button>
+              <button class="btn-danger" id="clOff">断开云端</button>
+            </div>
+          </div>
+          <p class="note-text" id="clStatus" style="grid-column:1/-1">未启用云端。</p>
+        </div>
+      </div>
+
       <div class="card">
         <div class="card-head"><h3><span class="em">💾</span> 数据</h3></div>
         <div class="card-body">
-          <p class="note-text">所有内容都保存在这台设备的浏览器里（IndexedDB / localStorage），不会上传到任何服务器。清理浏览器数据会删除它们 —— <strong>请定期导出备份</strong>。</p>
+          <p class="note-text">默认所有内容都保存在这台设备的浏览器里（IndexedDB / localStorage），不会上传到任何服务器。只有你手动填了上面的云端信息，文字与照片才会同步到你自己的 Supabase 项目。清理浏览器数据会删除本地内容 —— <strong>请定期导出备份</strong>。</p>
           <div class="btn-row">
             <button class="btn-primary" id="exportBtn">导出备份 (.json)</button>
             <button class="btn-ghost-solid" id="importBtn">导入备份</button>
@@ -456,5 +488,6 @@
 <script src="js/store.js"></script>
 <script src="js/app.js"></script>
 <script src="js/more.js"></script>
+<script src="js/cloud.js"></script>
 </body>
 </html>

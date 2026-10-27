@@ -433,6 +433,42 @@
       lsDel('photos');
     },
 
+    /** 云端合并用：用远端元数据覆盖本地照片列表，但保留本地已有的二进制缓存 */
+    async replacePhotoMeta(list) {
+      list = Array.isArray(list) ? list : [];
+      S.urlCache.forEach(function (v, k) { S.revokeURL(k); });
+      S.urlCache.clear();
+      var keep = {};
+      list.forEach(function (m) { keep[m.id] = 1; });
+      if (S.backend === 'idb') {
+        if (!S.db) return;
+        var cur = await idbTx(S.db, 'readonly', function (st) { return st.getAll(); }) || [];
+        var byId = {};
+        cur.forEach(function (r) { byId[r.id] = r; });
+        await idbTx(S.db, 'readwrite', function (st) {
+          cur.forEach(function (r) { if (!keep[r.id]) st.delete(r.id); });
+          list.forEach(function (m) {
+            var old = byId[m.id];
+            if (old) {
+              var next = Object.assign({}, old, m);
+              if (old.full) next.full = old.full;
+              if (old.thumb) next.thumb = old.thumb;
+              st.put(next);
+            } else {
+              st.put(Object.assign({}, m));
+            }
+          });
+        });
+        return;
+      }
+      var cm = {};
+      S.getList('photos').forEach(function (r) { cm[r.id] = r; });
+      S.setList('photos', list.map(function (m) {
+        var old = cm[m.id];
+        return old ? Object.assign({}, old, m) : Object.assign({}, m);
+      }));
+    },
+
     /** 取可显示的 URL（带缓存） */
     async photoURL(id, kind) {
       kind = kind || 'thumb';
